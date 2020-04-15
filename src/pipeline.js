@@ -144,14 +144,15 @@ const pipeline = async (options = {}) => {
       const iconPaths = icons.map(getAbsolutePath);
       await iconInput.uploadFile(...iconPaths);
       await page.waitFor(500);
+      let iconsGaveWarnings = false;
       try {
         const handle = await page.waitForSelector(PAGE.OVERLAY_BUTTON, { visible: true, timeout: 2000 });
-        if (handle) {
-          await handle.click();
-        }
+        iconsGaveWarnings = !!handle;
       // eslint-disable-next-line no-empty
       } catch (error) {}
-      
+      if (iconsGaveWarnings) {
+        throw new Error('Importing of icons gave a popup with warnings(eg. stroke used in svg), which means cli cannot do its magic.');
+      }
       await page.waitForSelector(PAGE.FIRST_ICON_BOX);
       await page.click(PAGE.MENU_BUTTON);
       await page.waitForSelector(PAGE.SELECT_ALL_BUTTON, { visible: true });
