@@ -1,6 +1,4 @@
-node_modules
-yarn-error.log
-output
-.DS_Store
-
-test/staging/
+node_modules/
+dist/
+.idea/
+test/

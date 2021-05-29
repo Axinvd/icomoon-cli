@@ -11,31 +11,41 @@
     "showQuickUse2": true,
     "showSVGs": true,
     "fontPref": {
-      "prefix": "icon-",
+      "prefix": "icomoon-",
       "metadata": {
-        "fontFamily": "icomoon"
+        "fontFamily": "icomoon-font",
+        "majorVersion": 1,
+        "minorVersion": 0
       },
       "metrics": {
         "emSize": 1024,
         "baseline": 6.25,
         "whitespace": 50
       },
-      "embed": false
+      "embed": false,
+      "ie7": false,
+      "noie8": true,
+      "cssVars": true,
+      "cssVarsFormat": "scss",
+      "showSelector": false,
+      "showMetrics": false,
+      "showMetadata": false,
+      "showVersion": false,
+      "resetPoint": 59648
     },
     "imagePref": {
-      "prefix": "icon-",
+      "prefix": "icomoon-",
       "png": true,
       "useClassSelector": true,
       "color": 0,
       "bgColor": 16777215,
       "classSelector": ".icon",
-      "height": 32,
-      "columns": 16,
-      "margin": 16
+      "name": "icomoon"
     },
     "historySize": 50,
     "showCodes": false,
     "gridSize": 16,
-    "showLiga": false
+    "showLiga": false,
+    "showGrid": false
   }
 }
