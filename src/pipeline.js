@@ -10,7 +10,8 @@ const PAGE = {
   IMPORT_CONFIG_BUTTON: '.file.unit',
   IMPORT_SELECTION_INPUT: '.file.unit input[type="file"]',
   OVERLAY_CONFIRM: '.overlay button.mrl',
-  OVERLAY_BUTTON: '.overlay button',
+  OVERLAY_BUTTON_ON_ADD: '.overlay button',
+  OVERLAY_BUTTON_ON_LOAD: '.overlay button[ng-show="message.secondButton"]',
   NEW_SET_BUTTON: '.menuList1 button',
   MAIN_MENU_BUTTON: '.bar-top button .icon-menu',
   MENU_BUTTON: 'h1 button .icon-menu',
@@ -86,7 +87,8 @@ const pipeline = async (options = {}) => {
       selectionPath,
       repositoryPath,
       forceOverride = false,
-      visible = false
+      visible = false,
+      cancel = false
     } = options;
     const outputDir = options.outputDir ? getAbsolutePath(options.outputDir) : DEFAULT_OPTIONS.outputDir;
     // prepare stage
@@ -107,9 +109,15 @@ const pipeline = async (options = {}) => {
     await fs.remove(outputDir);
     await fs.ensureDir(outputDir);
 
-    const browser = await puppeteer.launch({ headless: !visible });
+    const width = 1024;
+    const height = 1600;
+    const browser = await puppeteer.launch({ 'headless': !visible, 'defaultViewport' : { width, height }});
     logger('Started a new chrome instance, going to load icomoon.io.');
     const page = await (await browser).newPage();
+
+    await page.setUserAgent( 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36' );
+    await page.setViewport( { width, height } );
+
     await page._client.send('Page.setDownloadBehavior', {
       behavior: 'allow',
       downloadPath: outputDir
@@ -144,15 +152,7 @@ const pipeline = async (options = {}) => {
       const iconPaths = icons.map(getAbsolutePath);
       await iconInput.uploadFile(...iconPaths);
       await page.waitFor(500);
-      let iconsGaveWarnings = false;
-      try {
-        const handle = await page.waitForSelector(PAGE.OVERLAY_BUTTON, { visible: true, timeout: 2000 });
-        iconsGaveWarnings = !!handle;
-      // eslint-disable-next-line no-empty
-      } catch (error) {}
-      if (iconsGaveWarnings) {
-        throw new Error('Importing of icons gave a popup with warnings(eg. stroke used in svg), which means cli cannot do its magic.');
-      }
+      await cancelOverlay(page, PAGE.OVERLAY_BUTTON_ON_ADD, cancel)
       await page.waitForSelector(PAGE.FIRST_ICON_BOX);
       await page.click(PAGE.MENU_BUTTON);
       await page.waitForSelector(PAGE.SELECT_ALL_BUTTON, { visible: true });
@@ -197,6 +197,9 @@ const pipeline = async (options = {}) => {
     await sleep(1000);
     // reload the page let icomoon read latest indexedDB data
     await page.reload();
+    await sleep(1000);
+
+    await cancelOverlay(page, PAGE.OVERLAY_BUTTON_ON_LOAD, cancel)
 
     await page.waitForSelector(PAGE.DOWNLOAD_BUTTON);
     await page.click(PAGE.DOWNLOAD_BUTTON);
@@ -219,4 +222,23 @@ const pipeline = async (options = {}) => {
     return { outputDir: '', didOutput: false };
   }
 };
+
+const cancelOverlay = async (page, item, cancel) => {
+  let warnings = false;
+  try {
+    const handle = await page.waitForSelector(item, { visible: true, timeout: 2000 });
+    warnings = !!handle;
+    // eslint-disable-next-line no-empty
+  } catch (error) {}
+  if (warnings) {
+    if (cancel) {
+      logger('Importing of icons gave a popup with warnings(eg. stroke used in svg), which means cli cannot do its magic.');
+
+      await page.click(item);
+    } else {
+      throw new Error('Importing of icons gave a popup with warnings(eg. stroke used in svg), which means cli cannot do its magic.')
+    }
+  }
+}
+
 module.exports = pipeline;

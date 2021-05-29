@@ -38,6 +38,11 @@ const argv = yargs
     default: false,
     describe: 'run a GUI chrome instead of headless mode',
   })
+  .option('c', {
+    alias: 'cancel',
+    default: false,
+    describe: 'cancel overlays',
+  })
   .argv;
 
 let options = {
