@@ -36,7 +36,6 @@ export const splitData = ({
 function initialIconKeysCreator(names: string[]) {
   return (
     names
-      //todo check on different os
       .sort((a, b) => a.localeCompare(b))
       .reduce((prev, name) => {
         return prev + `\n  ${camelcase(name)}: '${name}',`

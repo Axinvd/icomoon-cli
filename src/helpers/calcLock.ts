@@ -20,7 +20,7 @@ export const calcLock = (
   const nextLock = icons.reduce((prev, curr) => {
     const stat = statSync(curr)
     const name = basename(curr)
-    isNew ||= prev[name] != stat.mtimeMs
+    isNew ||= lock[name] != stat.mtimeMs
     prev[name] = stat.mtimeMs
     return prev
   }, mode == 'add' ? lock : {})

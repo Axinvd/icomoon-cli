@@ -14,8 +14,6 @@ import {removeDuplicates} from './helpers/removeDuplicates'
 export async function run({
   selection,
   visible,
-  outputFont,
-  outputNames,
   lock,
   mode,
   ...options
@@ -39,7 +37,7 @@ export async function run({
       writeJSONSync(selectionPath, selection, {spaces: 2})
     }
     await pipeline({icons, selectionPath, visible, output})
-    await splitData({output, selectionPath, outputFont, outputNames})
+    await splitData({output, selectionPath, ...options})
     writeJSONSync(lock, nextLock)
   } else {
     logger.log('Font is up to date')

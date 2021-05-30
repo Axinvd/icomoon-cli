@@ -25,9 +25,9 @@ export const initSelection = async (selection: string) => {
       await promises.access(selectionJson)
       selectionPath = selectionJson
     } catch (e) {
-      const parentName = basename(dirname(selection))
+      const parentPath = dirname(selection)
       try {
-        if (await isDirectory(parentName)) {
+        if (await isDirectory(parentPath)) {
           // eslint-disable-next-line @typescript-eslint/no-var-requires
           const initialConfig = require(selectionEmptyPath)
           const fontName = basename(selection).split('.')[0]
