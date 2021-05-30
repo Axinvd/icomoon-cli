@@ -29,8 +29,8 @@ export async function run({
   const {isNew, nextLock} = calcLock(lock, icons, mode)
   if (isNew) {
     const tempPath = join(tmpdir(), 'icomoon-cli')
-    const selectionPath = await initSelection(selection || tempPath)
-    const outputAll = options.outputAll || tempPath
+    const selectionPath = await initSelection(selection)
+    const output = options.output || tempPath
     if (mode == 'add') {
       await removeDuplicates(selectionPath, icons)
     } else {
@@ -38,8 +38,8 @@ export async function run({
       selection.icons = []
       writeJSONSync(selectionPath, selection, {spaces: 2})
     }
-    await pipeline({icons, selectionPath, visible, outputAll})
-    await splitData({outputAll, selectionPath, outputFont, outputNames})
+    await pipeline({icons, selectionPath, visible, output})
+    await splitData({output, selectionPath, outputFont, outputNames})
     writeJSONSync(lock, nextLock)
   } else {
     logger.log('Font is up to date')
@@ -52,14 +52,18 @@ if (module.parent == null) {
   program
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     .version(require('../package.json').version)
-    .option('-s, --selection [string]', 'path to icomoon selection file')
+    .option(
+      '-s, --selection [string]',
+      'path to icomoon selection file',
+      './icomoon.json',
+    )
     .option('-i, --icons <sting...>', 'path to icons need to be imported')
     .option(
-      '-f, --outputFont <string...>',
+      '-f, --outputFont [string...]',
       'output font path with type, separated by coma',
     )
     .option('-l, --lock [string]', 'path to lock file', './icomoon-lock.json')
-    .option('-a, --outputAll [string]', 'all icomoon generated files path')
+    .option('-o, --output [string]', 'all icomoon generated files path')
     .option('-n, --outputNames [string]', 'path to icons const')
     .option('-v, --visible', 'run a GUI chrome instead of headless mode', false)
     .option('-m, --mode [string]', "mode 'add' or 'repository'", 'add')

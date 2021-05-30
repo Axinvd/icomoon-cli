@@ -1,13 +1,13 @@
 export interface IOptions extends ISplit, IPipeline {
-  selection?: string
-  outputAll?: string
+  selection: string
+  output?: string
   lock: string
   mode: 'add' | 'repository'
 }
 
 export interface IRequired {
   selectionPath: string
-  outputAll: string
+  output: string
 }
 
 export interface IPipeline {
@@ -16,7 +16,7 @@ export interface IPipeline {
 }
 
 export interface ISplit {
-  outputFont: string[]
+  outputFont?: string[]
   outputNames?: string
   iconKeysCreator?: (names: string[]) => string
 }

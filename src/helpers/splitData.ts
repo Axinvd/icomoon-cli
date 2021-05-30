@@ -4,13 +4,13 @@ import {IIcomoonConfig, IRequired, ISplit} from '../interfaces'
 import camelcase from 'camelcase'
 
 export const splitData = ({
-  outputAll,
+  output,
   selectionPath,
   outputNames,
   iconKeysCreator,
   outputFont,
 }: IRequired & ISplit) => {
-  const selectionResultPath = join(outputAll, 'selection.json')
+  const selectionResultPath = join(output, 'selection.json')
   copyFileSync(selectionResultPath, selectionPath)
 
   const selectionResult = JSON.parse(
@@ -21,13 +21,13 @@ export const splitData = ({
     const content = (iconKeysCreator || initialIconKeysCreator)(names)
     writeFileSync(outputNames, content)
   }
-  const fontPath = join(outputAll, 'fonts')
+  const fontPath = join(output, 'fonts')
   const fontFiles = readdirSync(fontPath)
   const fonts = fontFiles.reduce((prev, current) => {
     prev[extname(current).slice(1)] = join(fontPath, current)
     return prev
   }, {} as {[key: string]: string})
-  outputFont.forEach((item) => {
+  outputFont?.forEach((item) => {
     const [path, fontType] = item.split(',')
     copyFileSync(fonts[fontType], join(path, basename(fonts[fontType])))
   })

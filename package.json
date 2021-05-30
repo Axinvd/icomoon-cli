@@ -1,22 +1,41 @@
 {
   "name": "@axinvd/icomoon-cli",
-  "version": "3.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "cli for icomoon font creation",
   "main": "dist/index.js",
+  "types": "index.d.ts",
   "bin": {
     "icomoon-cli": "dist/cli.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node dist/cli.js -i test/*.svg -s test -f ./test,ttf -n test/iconNames.ts -l ./test/fon-lock.json",
-    "ts": "tsc -p .",
-    "lint": "npm run ts && eslint ./src --ext .js,.jsx,.ts,.tsx"
+    "lint": "tsc -p . && eslint ./src --ext .js,.jsx,.ts,.tsx"
+  },
+  "homepage": "https://github.com/axinvd/icomoon-cli.git",
+  "bugs": {
+    "url": "https://github.com/Axinvd/icomoon-cli/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/axinvd/icomoon-cli.git"
+    "url": "git://github.com/axinvd/icomoon-cli.git"
   },
-  "keywords": [],
+  "keywords": [
+    "icomoon",
+    "font",
+    "react",
+    "react-native",
+    "react-component",
+    "react-native-component",
+    "mobile",
+    "ios",
+    "android",
+    "ui",
+    "icon",
+    "icons",
+    "vector",
+    "svg"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {

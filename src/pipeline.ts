@@ -30,7 +30,7 @@ const PAGE = {
 
 export const pipeline = async (options: IRequired & IPipeline) => {
   const {icons, selectionPath, visible = false} = options
-  const outputDir = getAbsolutePath(options.outputAll)
+  const outputDir = getAbsolutePath(options.output)
   // prepare stage
   logger.log('Preparing...')
   const absoluteSelectionPath = getAbsolutePath(selectionPath)
