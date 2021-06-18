@@ -1,6 +1,6 @@
 {
   "name": "@axinvd/icomoon-cli",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "cli for icomoon font creation",
   "main": "dist/index.js",
   "types": "index.d.ts",
@@ -10,7 +10,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node dist/cli.js -i test/*.svg -s test -f ./test,ttf -n test/iconNames.ts -l ./test/fon-lock.json",
-    "lint": "tsc -p . && eslint ./src --ext .js,.jsx,.ts,.tsx"
+    "lint": "tsc -p . && eslint ./src --ext .js,.jsx,.ts,.tsx",
+    "publish": "npm publish --access public"
   },
   "homepage": "https://github.com/axinvd/icomoon-cli.git",
   "bugs": {

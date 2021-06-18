@@ -25,7 +25,7 @@ export async function run({
   if (!icons.length) {
     throw new Error('No new icons found.')
   }
-  const {isNew, nextLock} = calcLock(lock, icons, mode)
+  const {isNew, writeNewLock} = calcLock(lock, icons, mode)
   if (isNew) {
     const tempPath = join(tmpdir(), 'icomoon-cli')
     const selectionPath = await initSelection(selection)
@@ -39,7 +39,7 @@ export async function run({
     }
     await pipeline({icons, selectionPath, visible, output})
     await splitData({output, selectionPath, ...options})
-    writeJSONSync(lock, nextLock)
+    writeNewLock()
   } else {
     logger.log('Font is up to date')
   }
@@ -61,7 +61,7 @@ if (module.parent == null) {
       '-f, --outputFont [string...]',
       'output font path with type, separated by coma',
     )
-    .option('-l, --lock [string]', 'path to lock file', './icomoon-lock.json')
+    .option('-l, --lock [string]', 'path to lock file')
     .option('-o, --output [string]', 'all icomoon generated files path')
     .option('-n, --outputNames [string]', 'path to icons const')
     .option('-v, --visible', 'run a GUI chrome instead of headless mode', false)

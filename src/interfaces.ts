@@ -1,7 +1,7 @@
 export interface IOptions extends ISplit, IPipeline {
   selection: string
   output?: string
-  lock: string
+  lock?: string
   mode: 'add' | 'repository'
 }
 
